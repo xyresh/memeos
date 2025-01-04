@@ -34,6 +34,8 @@ void terminal_writestring(const char* data);
 /* New printf-like functionality */
 void terminal_write_int(int num);
 void terminal_write_string(const char* str);
+void terminal_write_hex(uintptr_t num);
 void terminal_printf(const char* format, ...);
+
 
 #endif /* STDIO_H */

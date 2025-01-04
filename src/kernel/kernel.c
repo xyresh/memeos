@@ -17,34 +17,38 @@
 #error "This tutorial needs to be compiled with a ix86-elf compiler"
 #endif
 
-
 void kernel_main(void) {
-	terminal_initialize();
+    terminal_initialize();
+
+    memory_init(2048); // Initialize heap with 2048 bytes
 
     terminal_writestring("Testing heap allocation...\n");
 
-    void* ptr1 = kmalloc(64); // Allocate 64 bytes
+    terminal_writestring("Initial heap pointer: ");
+    terminal_write_hex((uintptr_t)heap_ptr);  // Display heap_ptr in hex
+    terminal_writestring("\n");
+
+    void* ptr1 = kmalloc(256);
     if (ptr1) {
-        terminal_writestring("Allocated 64 bytes\n");
-    } else {
-        terminal_writestring("Allocation failed\n");
+        terminal_writestring("Allocated 256 bytes\n");
     }
+    terminal_writestring("Current heap pointer: ");
+    terminal_write_hex((uintptr_t)heap_ptr);  // Display heap_ptr after first allocation
+    terminal_writestring("\n");
 
-    void* ptr2 = kmalloc(128); // Allocate 128 bytes
+    memory_debug();
+
+    void* ptr2 = kmalloc(256);
     if (ptr2) {
-        terminal_writestring("Allocated 128 bytes\n");
-    } else {
-        terminal_writestring("Allocation failed\n");
+        terminal_writestring("Allocated 256 bytes\n");
     }
+    terminal_writestring("Current heap pointer: ");
+    terminal_write_hex((uintptr_t)heap_ptr);  // Display heap_ptr after second allocation
+    terminal_writestring("\n");
 
-    kfree(ptr1); // Free the first block
-    terminal_writestring("Freed 64 bytes\n");
+    memory_debug();
 
-    void* ptr3 = kmalloc(64); // Allocate again to test reuse
-    if (ptr3) {
-        terminal_writestring("Re-allocated 64 bytes\n");
-    } else {
-        terminal_writestring("Allocation failed\n");
-    }
 
+    terminal_writestring("\n\n\n\n\n");
+    memory_stats();
 }

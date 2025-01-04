@@ -112,6 +112,30 @@ void terminal_write_string(const char* str) {
     }
 }
 
+void terminal_write_hex(uintptr_t num) {
+    const char hex_chars[] = "0123456789ABCDEF";  // Hexadecimal character lookup
+    char hex_buffer[9];  // Enough space for a 32-bit value (8 hex digits + null terminator)
+    
+    // Handle the case of 0
+    if (num == 0) {
+        terminal_putchar('0');
+        return;
+    }
+
+    int i = 7;  // Start from the last position of the buffer (for 32-bit, the last hex digit)
+    hex_buffer[8] = '\0';  // Null-terminate the string
+
+    // Convert the number to hexadecimal and store it in hex_buffer
+    while (num > 0) {
+        hex_buffer[i] = hex_chars[num & 0xF];  // Get the last 4 bits and map to hex char
+        num >>= 4;  // Shift the number 4 bits to the right
+        i--;
+    }
+
+    // Output the hexadecimal string
+    terminal_writestring(&hex_buffer[i + 1]);
+}
+
 /* Simple printf implementation */
 void terminal_printf(const char* format, ...) {
     va_list args;
