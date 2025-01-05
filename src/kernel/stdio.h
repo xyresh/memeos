@@ -36,6 +36,7 @@ void terminal_write_int(int num);
 void terminal_write_string(const char* str);
 void terminal_write_hex(uintptr_t num);
 void terminal_printf(const char* format, ...);
+void itoa(int num, char* str, int base);
 
 
 #endif /* STDIO_H */

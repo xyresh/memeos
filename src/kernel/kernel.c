@@ -5,6 +5,7 @@
 //use memeos headers
 #include "memory.h"
 #include "stdio.h"
+#include "multitasking.h"
 
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
@@ -16,7 +17,7 @@
 #if !defined(__i386__)
 #error "This tutorial needs to be compiled with a ix86-elf compiler"
 #endif
-
+/*
 void kernel_main(void) {
     terminal_initialize();
 
@@ -51,4 +52,59 @@ void kernel_main(void) {
 
     terminal_writestring("\n\n\n\n\n");
     memory_stats();
+}
+*/
+
+
+void task1(void) {
+    while (1) {
+        terminal_writestring("Task 1 is running...\n");
+        for (volatile int i = 0; i < 1000000; i++) {} // A delay to avoid flooding the terminal too quickly
+    }
+}
+
+
+void task2(void) {
+    while (1) {
+        terminal_writestring("Task 2 is running...\n");
+        for (volatile int i = 0; i < 1000000; i++) {} // A delay to avoid flooding the terminal too quickly
+    }
+}
+
+void task3(void) {
+    while (1) {
+        terminal_writestring("Task 3 is running...\n");
+        for (volatile int i = 0; i < 1000000; i++) {} // A delay to avoid flooding the terminal too quickly
+    }
+}
+
+void kernel_main(void) {
+    // Initialize the terminal
+    terminal_initialize();
+    terminal_writestring("Kernel initialized.\n");
+
+    // Initialize memory management
+    memory_init(10240); // Initialize heap with 10KB
+    terminal_writestring("Memory management initialized.\n");
+
+    // Initialize multitasking
+    multitasking_init();
+    terminal_writestring("Multitasking initialized.\n");
+
+    // Create tasks
+    create_task(task1);
+    create_task(task2);
+    create_task(task3);
+    create_task(idle_task);  // Add the idle task
+    terminal_writestring("Tasks created.\n");
+
+    // Set the current task to the first task in the list
+    current_task = task_list;  // Ensure the scheduler starts from the first task
+    terminal_writestring("Current task set to the first task.\n");
+
+    // Simulate multitasking by invoking the scheduler manually
+    while (1) {
+        scheduler_tick();  // The scheduler will now pick tasks, including the idle task
+        memory_stats();
+    }
 }

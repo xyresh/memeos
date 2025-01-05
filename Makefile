@@ -6,7 +6,7 @@ LDFLAGS = -ffreestanding -O2 -nostdlib
 SRC_DIR = src
 BUILD_DIR = build
 KERNEL_DIR = $(SRC_DIR)/kernel
-OBJS = $(BUILD_DIR)/boot.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/memory.o $(BUILD_DIR)/stdio.o
+OBJS = $(BUILD_DIR)/boot.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/memory.o $(BUILD_DIR)/stdio.o $(BUILD_DIR)/multitasking.o
 LINKER_SCRIPT = $(SRC_DIR)/linker.ld
 OUTPUT_BIN = $(BUILD_DIR)/memeos.bin
 
@@ -27,6 +27,10 @@ $(BUILD_DIR)/memory.o: $(KERNEL_DIR)/memory.c
 
 $(BUILD_DIR)/stdio.o: $(KERNEL_DIR)/stdio.c
 	$(CC) -c $< -o $@ $(CFLAGS)
+
+$(BUILD_DIR)/multitasking.o: $(KERNEL_DIR)/multitasking.c
+	$(CC) -c $< -o $@ $(CFLAGS)
+
 
 # Link all object files into the final binary
 $(OUTPUT_BIN): $(OBJS)
